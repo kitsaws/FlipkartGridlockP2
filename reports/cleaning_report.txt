@@ -1,0 +1,16 @@
+=== Data Cleaning Report ===
+Initial row count: 298450
+Initial column count: 24
+
+Dropped 8 columns (leakage & empty).
+Columns removed: updated_vehicle_number, updated_vehicle_type, validation_status, validation_timestamp, data_sent_to_scita_timestamp, description, closed_datetime, action_taken_timestamp
+
+Found and removed 5338 duplicate rows.
+Duplicates defined by matching: created_datetime, vehicle_number, latitude, longitude, violation_type
+
+Rows after dropping missing coordinates/timestamps: 293112
+=== Data Quality Checks ===
+Rows flagged with invalid coordinates: 0
+Rows flagged with invalid temporal relations: 319
+
+Final dataset shape: 293112 rows, 18 columns.

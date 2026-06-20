@@ -1,0 +1,33 @@
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Data Directories (Do not commit large datasets)
+data/
+DATASET/
+cleaned/
+features/
+
+# Models (Do not commit large binary model files)
+models/
+
+# Outputs (Do not commit generated maps, charts, and target lists)
+outputs/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# OS/System Files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp

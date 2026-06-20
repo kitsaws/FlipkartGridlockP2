@@ -1,0 +1,9 @@
+pandas
+numpy
+h3
+scikit-learn
+hdbscan
+catboost
+shap
+matplotlib
+seaborn
