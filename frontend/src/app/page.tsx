@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 
 const MapComponent = dynamic(() => import("../components/MapComponent"), { ssr: false });
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function Dashboard() {
   const [dates, setDates] = useState<string[]>([]);
   const [topVios, setTopVios] = useState<string[]>([]);
@@ -20,7 +22,7 @@ export default function Dashboard() {
 
   // Fetch initial config
   useEffect(() => {
-    fetch("http://localhost:8000/api/config")
+    fetch(`${API_URL}/api/config`)
       .then(r => r.json())
       .then(data => {
         setDates(data.dates);
@@ -35,7 +37,7 @@ export default function Dashboard() {
         
         // Fetch initial predictions
         if (initialDate) {
-          fetch("http://localhost:8000/api/predict", {
+          fetch(`${API_URL}/api/predict`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -56,7 +58,7 @@ export default function Dashboard() {
     if(!selectedDate) return;
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/predict", {
+      const res = await fetch(`${API_URL}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -101,7 +103,7 @@ export default function Dashboard() {
             <ShieldAlert className="text-red-500" />
             GridLock AI
           </h1>
-          <p className="text-xs text-slate-400">Spatio-Temporal Enforcement Priority Intelligence</p>
+          <p className="text-xs text-slate-400">Predictive Enforcement Intelligence</p>
         </div>
 
         {/* Time Travel */}

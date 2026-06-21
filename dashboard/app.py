@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(BASE_DIR, 'features', 'predictive_time_series.csv')
 MODEL_PATH = os.path.join(BASE_DIR, 'models', 'risk_classifier.pkl')
 
-st.title("Spatio-Temporal Enforcement Priority Intelligence")
+st.title("Predictive Enforcement Intelligence")
 st.markdown("Predictive AI Engine mapping future parking gridlocks before they occur.")
 
 # 2. Loading Data & Models (Cached for performance)

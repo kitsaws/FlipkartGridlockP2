@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "GridLock AI",
-  description: "Spatio-Temporal Enforcement Priority Intelligence",
+  description: "Predictive Enforcement Intelligence",
 };
 
 export default function RootLayout({
