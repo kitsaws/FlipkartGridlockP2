@@ -9,3 +9,5 @@ seaborn
 folium
 streamlit
 streamlit-folium
+fastapi
+uvicorn
