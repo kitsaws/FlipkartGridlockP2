@@ -8,7 +8,7 @@ warnings.filterwarnings('ignore')
 
 def evaluate_all():
     print("Loading Dataset...")
-    df = pd.read_csv('features/predictive_time_series.csv')
+    df = pd.read_csv('../features/predictive_time_series.csv')
     
     # Preprocessing
     cell_avg = df.groupby('h3_cell_id')['weighted_severity_score'].mean().reset_index(name='historical_avg_severity')

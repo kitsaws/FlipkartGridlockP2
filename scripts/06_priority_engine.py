@@ -72,8 +72,8 @@ def compute_priority_scores(input_file, output_file):
     print("Task 6 completed successfully!")
 
 if __name__ == "__main__":
-    INPUT = "features/zone_time_aggregated_clusters.csv"
-    OUTPUT = "features/enforcement_priority.csv"
+    INPUT = "../features/zone_time_aggregated_clusters.csv"
+    OUTPUT = "../features/enforcement_priority.csv"
     
     print("=== Starting Task 6: Enforcement Priority Engine ===")
     compute_priority_scores(INPUT, OUTPUT)

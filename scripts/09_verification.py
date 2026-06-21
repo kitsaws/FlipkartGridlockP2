@@ -4,13 +4,13 @@ import h3
 
 def generate_verification_map():
     print("Loading raw, unaggregated violation data...")
-    raw_df = pd.read_csv('cleaned/cleaned_data.csv')
+    raw_df = pd.read_csv('../cleaned/cleaned_data.csv')
     
     # Take a random sample of 10,000 actual violation points so we don't crash the browser
     sample_points = raw_df.dropna(subset=['latitude', 'longitude']).sample(10000, random_state=42)
     
     print("Loading our Top 50 Computed Hotspots...")
-    top_50 = pd.read_csv('outputs/actionable_enforcement_targets.csv')
+    top_50 = pd.read_csv('../outputs/actionable_enforcement_targets.csv')
     
     lats, lngs = [], []
     for cell in top_50['h3_cell_id'].unique():
@@ -53,7 +53,7 @@ def generate_verification_map():
             fill_opacity=1.0
         ).add_to(m)
         
-    m.save('outputs/verification_map.html')
+    m.save('../outputs/verification_map.html')
     print("Saved Verification Map to outputs/verification_map.html")
 
 if __name__ == "__main__":

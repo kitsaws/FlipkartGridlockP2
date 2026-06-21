@@ -5,8 +5,8 @@ import numpy as np
 def create_project_structure():
     """Creates the necessary folder structure for the project."""
     folders = [
-        "data", "reports", "cleaned", "features", 
-        "models", "outputs", "dashboard"
+        "../data", "../reports", "../cleaned", "../features", 
+        "../models", "../outputs", "../dashboard"
     ]
     for folder in folders:
         os.makedirs(folder, exist_ok=True)
@@ -56,8 +56,8 @@ def inspect_dataset(file_path, output_report_path):
 
 if __name__ == "__main__":
     # Define paths
-    DATASET_PATH = "DATASET/jan to may police violation_anonymized791b166.csv"
-    REPORT_PATH = "reports/dataset_summary.csv"
+    DATASET_PATH = "../DATASET/jan to may police violation_anonymized791b166.csv"
+    REPORT_PATH = "../reports/dataset_summary.csv"
     
     print("=== Starting Task 0 & 1: Project Initialization & Dataset Inspection ===")
     # Task 0: Create project structure
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     
     # Task 1: Inspect dataset
     inspect_dataset(DATASET_PATH, REPORT_PATH)
-    print("\nNext step: Please review the 'reports/dataset_summary.csv' to decide on data cleaning steps.")
+    print("\nNext step: Please review the '../reports/dataset_summary.csv' to decide on data cleaning steps.")

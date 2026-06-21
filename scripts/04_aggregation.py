@@ -67,8 +67,8 @@ def perform_aggregation(input_file, output_file):
     print("Task 4 completed successfully!")
 
 if __name__ == "__main__":
-    INPUT_PATH = "features/engineered_data.csv"
-    OUTPUT_PATH = "features/zone_time_aggregated.csv"
+    INPUT_PATH = "../features/engineered_data.csv"
+    OUTPUT_PATH = "../features/zone_time_aggregated.csv"
     
     print("=== Starting Task 4: Aggregation ===")
     perform_aggregation(INPUT_PATH, OUTPUT_PATH)

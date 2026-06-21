@@ -60,13 +60,13 @@ def train_classifier(input_file, model_output_path):
     except Exception as e:
         pass
     
-    os.makedirs('models', exist_ok=True)
+    os.makedirs('../models', exist_ok=True)
     joblib.dump(model, model_output_path)
     print(f"\nTask 11 Completed: Saved V2 Multi-Class Risk Classifier to {model_output_path}")
 
 if __name__ == "__main__":
-    INPUT = "features/predictive_time_series.csv"
-    OUTPUT = "models/risk_classifier.pkl"
+    INPUT = "../features/predictive_time_series.csv"
+    OUTPUT = "../models/risk_classifier.pkl"
     
     print("=== Starting Task 11: Multi-Class Hotspot Risk Classification ===")
     train_classifier(INPUT, OUTPUT)

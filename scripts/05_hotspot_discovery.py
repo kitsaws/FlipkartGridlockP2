@@ -53,7 +53,7 @@ def discover_hotspots(agg_input, eng_input, hotspot_output):
     cell_df = pd.concat([high_density_cells, low_density_cells])
     
     # Save the clustering model
-    with open('models/hdbscan_model.pkl', 'wb') as f:
+    with open('../models/hdbscan_model.pkl', 'wb') as f:
         pickle.dump(clusterer, f)
         
     num_clusters = cell_df['cluster_id'].nunique() - (1 if -1 in cell_df['cluster_id'].values else 0)
@@ -109,9 +109,9 @@ def discover_hotspots(agg_input, eng_input, hotspot_output):
     print("Task 5 completed successfully!")
 
 if __name__ == "__main__":
-    AGG_INPUT = "features/zone_time_aggregated.csv"
-    ENG_INPUT = "features/engineered_data.csv"
-    HOTSPOT_OUTPUT = "features/hotspot_patterns.csv"
+    AGG_INPUT = "../features/zone_time_aggregated.csv"
+    ENG_INPUT = "../features/engineered_data.csv"
+    HOTSPOT_OUTPUT = "../features/hotspot_patterns.csv"
     
     print("=== Starting Task 5: Hotspot & Temporal Discovery ===")
     discover_hotspots(AGG_INPUT, ENG_INPUT, HOTSPOT_OUTPUT)

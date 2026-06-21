@@ -126,14 +126,14 @@ def build_time_series(input_file, output_file):
     final_df['primary_violation'] = final_df['primary_violation'].fillna("None")
     final_df['primary_violation_pct'] = final_df['primary_violation_pct'].fillna(0.0)
     
-    os.makedirs('features', exist_ok=True)
+    os.makedirs('../features', exist_ok=True)
     final_df.to_csv(output_file, index=False)
     print(f"Final Predictive Dataset constructed: {len(final_df)} rows.")
     print(f"Saved successfully to {output_file}")
 
 if __name__ == "__main__":
-    INPUT_PATH = "cleaned/cleaned_data.csv"
-    OUTPUT_PATH = "features/predictive_time_series.csv"
+    INPUT_PATH = "../cleaned/cleaned_data.csv"
+    OUTPUT_PATH = "../features/predictive_time_series.csv"
     
     print("=== Starting Task 10: V2 Violation-Aware Feature Engineering ===")
     build_time_series(INPUT_PATH, OUTPUT_PATH)

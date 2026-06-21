@@ -77,6 +77,8 @@ Open your browser and navigate to **[http://localhost:3000](http://localhost:300
 If you want to re-train the Random Forest from scratch using the raw data, run the scripts in order:
 
 ```bash
+cd scripts
+
 # 1. Generate 2.6M row zero-inflated predictive dataset
 python 10_time_series_aggregation.py
 

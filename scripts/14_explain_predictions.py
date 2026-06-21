@@ -58,14 +58,14 @@ def generate_explanations(data_file, model_file):
         shap_values_high = raw_shap
         demo_shap = raw_shap[demo_idx]
         
-    os.makedirs('outputs/explainability', exist_ok=True)
+    os.makedirs('../outputs/explainability', exist_ok=True)
     
     # Generate Summary Plot for High Risk
     plt.figure(figsize=(10, 8))
     shap.summary_plot(shap_values_high, X_sample, show=False)
     plt.title("What Drives HIGH Hotspot Risk? (SHAP Explainability)")
     plt.tight_layout()
-    plt.savefig('outputs/explainability/v2_shap_summary.png')
+    plt.savefig('../outputs/explainability/v2_shap_summary.png')
     plt.close()
     
     print("Saved SHAP summary to outputs/explainability/v2_shap_summary.png")
@@ -93,8 +93,8 @@ def generate_explanations(data_file, model_file):
         print(f"[{direction}] {feat} (Value: {demo_row[feat]:.1f})")
 
 if __name__ == "__main__":
-    DATA = "features/predictive_time_series.csv"
-    MODEL = "models/risk_classifier.pkl"
+    DATA = "../features/predictive_time_series.csv"
+    MODEL = "../models/risk_classifier.pkl"
     
     print("=== Starting Task 13: Multi-Class Predictive Explainability ===")
     generate_explanations(DATA, MODEL)

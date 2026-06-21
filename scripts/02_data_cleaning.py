@@ -102,9 +102,9 @@ def clean_data(input_file, output_file, report_file):
     print("Done. Review the cleaning report!")
 
 if __name__ == "__main__":
-    INPUT_PATH = "DATASET/jan to may police violation_anonymized791b166.csv"
-    OUTPUT_PATH = "cleaned/cleaned_data.csv"
-    REPORT_PATH = "reports/cleaning_report.txt"
+    INPUT_PATH = "../DATASET/jan to may police violation_anonymized791b166.csv"
+    OUTPUT_PATH = "../cleaned/cleaned_data.csv"
+    REPORT_PATH = "../reports/cleaning_report.txt"
     
     print("=== Starting Task 2: Data Cleaning ===")
     clean_data(INPUT_PATH, OUTPUT_PATH, REPORT_PATH)

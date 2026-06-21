@@ -51,8 +51,8 @@ def perform_feature_engineering(input_file, output_file):
     print("Done! Feature engineering completed.")
 
 if __name__ == "__main__":
-    INPUT_PATH = "cleaned/cleaned_data.csv"
-    OUTPUT_PATH = "features/engineered_data.csv"
+    INPUT_PATH = "../cleaned/cleaned_data.csv"
+    OUTPUT_PATH = "../features/engineered_data.csv"
     
     print("=== Starting Task 3: Feature Engineering ===")
     perform_feature_engineering(INPUT_PATH, OUTPUT_PATH)

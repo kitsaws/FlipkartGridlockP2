@@ -41,7 +41,7 @@ def run_eda(input_file):
     print("\n--- Top 3 Worst Days for Hotspots (0=Mon, 6=Sun) ---")
     print(hotspots['day_of_week'].value_counts().head(3))
     
-    os.makedirs('outputs/eda', exist_ok=True)
+    os.makedirs('../outputs/eda', exist_ok=True)
     
     # 1. Severity Distribution (Why R-Squared is failing)
     plt.figure(figsize=(10, 6))
@@ -49,32 +49,32 @@ def run_eda(input_file):
     plt.title("Distribution of Violation Counts (Severity)")
     plt.xlabel("Number of Violations in an Hour")
     plt.ylabel("Frequency")
-    plt.savefig('outputs/eda/1_severity_distribution.png')
+    plt.savefig('../outputs/eda/1_severity_distribution.png')
     plt.close()
     
     # 2. Hotspots by Hour
     plt.figure(figsize=(10, 6))
     sns.countplot(data=hotspots, x='hour', palette='Reds_r')
     plt.title("Hotspot Occurrences by Hour of Day")
-    plt.savefig('outputs/eda/2_hotspots_by_hour.png')
+    plt.savefig('../outputs/eda/2_hotspots_by_hour.png')
     plt.close()
     
     # 3. Hotspots by Day of Week
     plt.figure(figsize=(10, 6))
     sns.countplot(data=hotspots, x='day_of_week', palette='Oranges_r')
     plt.title("Hotspot Occurrences by Day of Week (0=Mon, 6=Sun)")
-    plt.savefig('outputs/eda/3_hotspots_by_day.png')
+    plt.savefig('../outputs/eda/3_hotspots_by_day.png')
     plt.close()
     
     # 4. Correlation Heatmap
     plt.figure(figsize=(12, 8))
     sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
     plt.title("Feature Correlation Heatmap")
-    plt.savefig('outputs/eda/4_correlation_heatmap.png')
+    plt.savefig('../outputs/eda/4_correlation_heatmap.png')
     plt.close()
     
     print("\nTask Completed: EDA Charts saved to outputs/eda/")
 
 if __name__ == "__main__":
-    INPUT = "features/predictive_time_series.csv"
+    INPUT = "../features/predictive_time_series.csv"
     run_eda(INPUT)

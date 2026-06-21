@@ -48,13 +48,13 @@ def train_severity_regressor(input_file, model_output_path):
     max_log = y.max()
     print(f"\nStage 12.2: The model can now predict a continuous Severity Score (0.0 to 10.0)")
     
-    os.makedirs('models', exist_ok=True)
+    os.makedirs('../models', exist_ok=True)
     joblib.dump(model, model_output_path)
     print(f"\nTask 12 Completed: Saved Severity Regressor to {model_output_path}")
 
 if __name__ == "__main__":
-    INPUT = "features/predictive_time_series.csv"
-    OUTPUT = "models/severity_regressor.pkl"
+    INPUT = "../features/predictive_time_series.csv"
+    OUTPUT = "../models/severity_regressor.pkl"
     
     print("=== Starting Task 12: Severity Learning Regression ===")
     train_severity_regressor(INPUT, OUTPUT)

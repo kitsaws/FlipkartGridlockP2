@@ -9,7 +9,7 @@ def create_deliverables(input_file):
     print(f"Loading final prioritized data from {input_file}...")
     df = pd.read_csv(input_file)
     
-    os.makedirs('outputs', exist_ok=True)
+    os.makedirs('../outputs', exist_ok=True)
     
     # Deliverable 2: Top N Enforcement Targets
     print("\nStage 12: Generating Top 50 Enforcement Targets...")
@@ -18,7 +18,7 @@ def create_deliverables(input_file):
     unique_zones = df.sort_values('priority_score', ascending=False).drop_duplicates(subset=['h3_cell_id'])
     top_50 = unique_zones.head(50).copy()
     
-    top_50.to_csv('outputs/actionable_enforcement_targets.csv', index=False)
+    top_50.to_csv('../outputs/actionable_enforcement_targets.csv', index=False)
     print("Saved top targets to outputs/actionable_enforcement_targets.csv")
     
     # Deliverable 1: Dynamic Hotspot Heatmap
@@ -80,7 +80,7 @@ def create_deliverables(input_file):
         except:
             continue
             
-    m.save('outputs/hotspot_heatmap.html')
+    m.save('../outputs/hotspot_heatmap.html')
     print("Saved Interactive Geographic Heatmap to outputs/hotspot_heatmap.html")
     
     # Deliverable 3: Temporal Analytics
@@ -103,12 +103,12 @@ def create_deliverables(input_file):
     sns.despine()
     
     plt.tight_layout()
-    plt.savefig('outputs/hourly_trends.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../outputs/hourly_trends.png', dpi=300, bbox_inches='tight')
     plt.close()
     
     print("Saved Hourly Trends Chart to outputs/hourly_trends.png")
-    print("\nTask 8 completed successfully! All deliverables are in the 'outputs/' folder.")
+    print("\nTask 8 completed successfully! All deliverables are in the '../outputs/' folder.")
 
 if __name__ == "__main__":
-    INPUT = "features/enforcement_priority.csv"
+    INPUT = "../features/enforcement_priority.csv"
     create_deliverables(INPUT)

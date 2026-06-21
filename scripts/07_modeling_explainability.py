@@ -54,19 +54,19 @@ def run_explainability_model(input_file):
     shap_values = explainer.shap_values(X_test)
     
     # Save SHAP Summary Plot
-    os.makedirs('outputs', exist_ok=True)
+    os.makedirs('../outputs', exist_ok=True)
     plt.figure(figsize=(10, 8))
     
     # The summary plot shows feature importance and the direction of impact
     shap.summary_plot(shap_values, X_test, show=False)
     plt.title("SHAP Explanation: What drives Enforcement Priority?", fontsize=14, pad=20)
     plt.tight_layout()
-    plt.savefig('outputs/shap_summary.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../outputs/shap_summary.png', dpi=300, bbox_inches='tight')
     plt.close()
     
     print("Saved SHAP summary plot to outputs/shap_summary.png")
     print("Task 7 completed successfully!")
 
 if __name__ == "__main__":
-    INPUT = "features/enforcement_priority.csv"
+    INPUT = "../features/enforcement_priority.csv"
     run_explainability_model(INPUT)
