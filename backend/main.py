@@ -19,13 +19,11 @@ app.add_middleware(
 )
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE_DIR, 'features', 'predictive_time_series.parquet')
+DATA_PATH = os.path.join(BASE_DIR, 'features', 'predictive_time_series_minimized.parquet')
 MODEL_PATH = os.path.join(BASE_DIR, 'models', 'risk_classifier.pkl')
 
-print("Loading dataset...")
+print("Loading minimized dataset...")
 df = pd.read_parquet(DATA_PATH)
-cell_avg = df.groupby('h3_cell_id')['weighted_severity_score'].mean().reset_index(name='historical_avg_severity')
-df = pd.merge(df, cell_avg, on='h3_cell_id', how='left')
 
 print("Loading model...")
 model = joblib.load(MODEL_PATH)

@@ -2,13 +2,7 @@ pandas
 numpy
 h3
 scikit-learn
-hdbscan
 shap
-matplotlib
-seaborn
-folium
-streamlit
-streamlit-folium
 fastapi
 uvicorn
 pyarrow

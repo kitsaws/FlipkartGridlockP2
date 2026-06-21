@@ -10,13 +10,15 @@ DATASET/
 cleaned/
 !features/
 features/*
-!features/predictive_time_series.parquet
+!features/predictive_time_series_minimized.parquet
 
 # Models (Do not commit large binary model files)
 models/
 !models/
 models/*
 !models/risk_classifier.pkl
+
+minimize_data.py
 
 # Outputs (Do not commit generated maps, charts, and target lists)
 outputs/
