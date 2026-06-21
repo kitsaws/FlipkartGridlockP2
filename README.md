@@ -1,8 +1,6 @@
-# GridLock AI: Spatio-Temporal Enforcement Priority Intelligence
+# GridLock AI: Predictive Enforcement Intelligence
 
-An end-to-end Machine Learning intelligence system that transforms noisy, historical parking violation data into a predictive enforcement strategy. By leveraging H3 spatial mapping, Random Forest classification, and SHAP explainability, this system predicts future gridlock hotspots and provides traffic commanders with actionable, human-readable insights.
-
-![Dashboard Preview](outputs/explainability/v2_shap_summary.png)
+An end-to-end AI system that transforms historical parking violation data into proactive enforcement intelligence. Using H3 spatial indexing, machine learning, and SHAP explainability, GridLock AI predicts future congestion hotspots, classifies enforcement risk levels, and provides traffic commanders with clear, actionable insights for smarter resource deployment.
 
 ---
 
@@ -59,17 +57,13 @@ The final intelligence is deployed through a robust **Client-Server Architecture
 
 ## 🚀 Quickstart Guide
 
-This repository does not track the massive 2.6M row dataset via GitHub. Before starting the servers, you must download the pre-processed predictive dataset.
+This repository is completely self-contained! We solved the 300MB dataset problem by converting the massive 2.6M row CSV into a highly optimized, columnar **Apache Parquet** file. The dataset is now a tiny **5MB** file tracked directly in GitHub, which loads into RAM instantly. You can run the entire system out-of-the-box without downloading external data.
 
 ### Prerequisites
 *   **Node.js 18+**
 *   **Python 3.9+**
 
-### Step 1: Download the Intelligence Dataset
-1. Download the `predictive_time_series.csv` file from Google Drive: **[🔗 Download Dataset Here](https://drive.google.com/drive/folders/1V5M_SK2jJl4_qQGg9ZI2CsXJdIhOrDas?usp=sharing)**
-2. Place the downloaded file precisely at: `features/predictive_time_series.csv`
-
-### Step 2: Start the AI Engine (FastAPI Backend)
+### Step 1: Start the AI Engine (FastAPI Backend)
 
 Open a terminal in the root directory.
 
@@ -87,7 +81,7 @@ uvicorn backend.main:app --port 8000
 ```
 *(Wait until you see `Application startup complete`)*
 
-### Step 3: Start the Web Dashboard (Next.js Frontend)
+### Step 2: Start the Web Dashboard (Next.js Frontend)
 
 Open a **second** terminal window and navigate into the `frontend` directory.
 
@@ -101,7 +95,7 @@ npm install
 npm run dev
 ```
 
-### Step 4: View the Intelligence
+### Step 3: View the Intelligence
 Open your browser and navigate to **[http://localhost:3000](http://localhost:3000)**. 
 
 *(Note: The map handles hundreds of highly dense H3 polygon coordinates, so give it a second to smoothly animate onto your screen!)*
@@ -130,3 +124,5 @@ python 12_severity_learning.py
 python 14_explain_predictions.py
 python 15_evaluate_models.py
 ```
+
+---

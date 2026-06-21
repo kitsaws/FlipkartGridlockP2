@@ -11,3 +11,4 @@ streamlit
 streamlit-folium
 fastapi
 uvicorn
+pyarrow

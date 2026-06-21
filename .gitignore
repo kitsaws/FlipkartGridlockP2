@@ -8,7 +8,9 @@ ENV/
 data/
 DATASET/
 cleaned/
-features/
+!features/
+features/*
+!features/predictive_time_series.parquet
 
 # Models (Do not commit large binary model files)
 models/
