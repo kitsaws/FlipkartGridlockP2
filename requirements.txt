@@ -7,3 +7,5 @@ shap
 matplotlib
 seaborn
 folium
+streamlit
+streamlit-folium
