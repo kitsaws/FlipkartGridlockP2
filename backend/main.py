@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
@@ -6,6 +6,8 @@ import joblib
 import shap
 import h3
 import os
+import subprocess
+import sys
 
 app = FastAPI()
 
@@ -36,6 +38,50 @@ if "None" in top_vios: top_vios.remove("None")
 available_dates = sorted(df['date'].unique())
 forecast_dates = available_dates[-7:]
 
+training_status = {"status": "idle", "step": ""}
+
+def run_training_pipeline():
+    global df, model, explainer, high_idx, top_vios, available_dates, forecast_dates, training_status
+    training_status["status"] = "running"
+    scripts_to_run = [
+        ("01_dataset_inspection.py", "Data Inspection"),
+        ("02_data_cleaning.py", "Data Cleaning"),
+        ("03_feature_engineering.py", "Feature Engineering"),
+        ("04_aggregation.py", "Basic Aggregation"),
+        ("10_time_series_aggregation.py", "Time Series Zero-Inflation"),
+        ("11_risk_classification_model.py", "Training Random Forest"),
+    ]
+    scripts_dir = os.path.join(BASE_DIR, "scripts")
+    
+    try:
+        for script, step_name in scripts_to_run:
+            training_status["step"] = step_name
+            script_path = os.path.join(scripts_dir, script)
+            subprocess.run([sys.executable, script_path], cwd=scripts_dir, check=True)
+            
+        training_status["step"] = "Minimizing Dataset"
+        minimize_script = os.path.join(BASE_DIR, "minimize_data.py")
+        subprocess.run([sys.executable, minimize_script], cwd=BASE_DIR, check=True)
+        
+        training_status["step"] = "Reloading Models"
+        df = pd.read_parquet(DATA_PATH)
+        model = joblib.load(MODEL_PATH)
+        explainer = shap.TreeExplainer(model)
+        high_idx = list(model.classes_).index('High')
+        
+        new_top_vios = df['primary_violation'].value_counts().head(4).index.tolist()
+        if "None" in new_top_vios: new_top_vios.remove("None")
+        top_vios = new_top_vios
+        
+        available_dates = sorted(df['date'].unique())
+        forecast_dates = available_dates[-7:]
+        
+        training_status["status"] = "idle"
+        training_status["step"] = "Complete"
+    except Exception as e:
+        training_status["status"] = "error"
+        training_status["step"] = f"Failed at {training_status['step']}: {str(e)}"
+
 class PredictRequest(BaseModel):
     date: str
     hour: int
@@ -45,8 +91,28 @@ class PredictRequest(BaseModel):
 def get_config():
     return {
         "dates": forecast_dates,
-        "top_violations": top_vios
+        "top_violations": top_vios,
+        "status": training_status
     }
+
+@app.get("/api/retrain/status")
+def get_retrain_status():
+    return training_status
+
+@app.post("/api/retrain")
+async def start_retrain(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    if training_status["status"] == "running":
+        return {"message": "Training already in progress."}
+        
+    data_dir = os.path.join(BASE_DIR, "data")
+    os.makedirs(data_dir, exist_ok=True)
+    file_path = os.path.join(data_dir, "raw_data.csv")
+    
+    with open(file_path, "wb") as f:
+        f.write(await file.read())
+        
+    background_tasks.add_task(run_training_pipeline)
+    return {"message": "Pipeline started successfully"}
 
 @app.post("/api/predict")
 def predict_hotspots(req: PredictRequest):

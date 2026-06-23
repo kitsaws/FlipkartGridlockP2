@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { SlidersHorizontal, Map as MapIcon, ShieldAlert, Clock, Info } from "lucide-react";
-import { motion } from "framer-motion";
+import { SlidersHorizontal, Map as MapIcon, ShieldAlert, Clock, Info, Database, UploadCloud, Loader2, ServerCrash } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MapComponent = dynamic(() => import("../components/MapComponent"), { ssr: false });
 
@@ -19,21 +19,35 @@ export default function Dashboard() {
   
   const [polygons, setPolygons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Retraining state
+  const [isRetraining, setIsRetraining] = useState(false);
+  const [retrainStep, setRetrainStep] = useState("");
+  const [retrainError, setRetrainError] = useState("");
+  
+  const [backendError, setBackendError] = useState(false);
 
   // Fetch initial config
   useEffect(() => {
     fetch(`${API_URL}/api/config`)
       .then(r => r.json())
       .then(data => {
-        setDates(data.dates);
-        const initialDate = data.dates.length > 0 ? data.dates[0] : "";
+        setDates(data.dates || []);
+        const initialDate = data.dates?.length > 0 ? data.dates[0] : "";
         if(initialDate) setSelectedDate(initialDate);
-        setTopVios(data.top_violations);
+        
+        const vios = data.top_violations || [];
+        setTopVios(vios);
         
         const initialWeights: Record<string, number> = {};
-        data.top_violations.forEach((v: string) => initialWeights[v] = 3.0);
+        vios.forEach((v: string) => initialWeights[v] = 3.0);
         setUserWeights(initialWeights);
         setLoading(false);
+        
+        if(data.status && data.status.status === "running") {
+          setIsRetraining(true);
+          setRetrainStep(data.status.step);
+        }
         
         // Fetch initial predictions
         if (initialDate) {
@@ -50,6 +64,7 @@ export default function Dashboard() {
       })
       .catch(e => {
         console.error("FastAPI backend not running", e);
+        setBackendError(true);
         setLoading(false);
       });
   }, []);
@@ -81,8 +96,83 @@ export default function Dashboard() {
     fetchPredictions();
   }
 
+  // Polling for retrain status
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isRetraining) {
+      interval = setInterval(async () => {
+        try {
+          const res = await fetch(`${API_URL}/api/retrain/status`);
+          const data = await res.json();
+          setRetrainStep(data.step);
+          if (data.status === "idle" && data.step === "Complete") {
+            setIsRetraining(false);
+            setRetrainStep("");
+            window.location.reload(); // Reload dashboard to fetch fresh models and config
+          } else if (data.status === "error") {
+            setIsRetraining(false);
+            setRetrainError(data.step);
+          }
+        } catch (e) {
+          console.error("Error polling retrain status", e);
+        }
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [isRetraining]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setIsRetraining(true);
+    setRetrainStep("Uploading CSV to Backend...");
+    setRetrainError("");
+
+    try {
+      const res = await fetch(`${API_URL}/api/retrain`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if(data.message) {
+        setRetrainStep("Initializing Pipeline...");
+      }
+    } catch (err) {
+      setIsRetraining(false);
+      setRetrainError("Failed to upload file.");
+    }
+  };
+
+  if (backendError) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 space-y-6">
+        <ServerCrash size={64} className="text-red-500/80" />
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white mb-2">Intelligence Engine Offline</h2>
+          <p className="text-sm">The GridLock FastAPI backend is currently unreachable.</p>
+          <p className="text-xs text-slate-500 mt-1">Please ensure uvicorn is running on port 8000.</p>
+        </div>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded shadow-lg transition-colors"
+        >
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
+
   if(loading && dates.length === 0) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">Loading Intelligence Engine... Ensure FastAPI is running on port 8000.</div>
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 space-y-4">
+        <Loader2 size={48} className="text-blue-500 animate-spin" />
+        <p className="font-medium animate-pulse">Initializing Intelligence Engine...</p>
+      </div>
+    );
   }
 
   const highCount = polygons.filter(p => p.risk === "High").length;
@@ -104,6 +194,20 @@ export default function Dashboard() {
             GridLock AI
           </h1>
           <p className="text-xs text-slate-400">Predictive Enforcement Intelligence</p>
+          
+          <div className="mt-6 p-3 bg-slate-800/50 border border-slate-700/50 rounded-lg">
+            <h2 className="text-xs font-semibold text-slate-300 flex items-center gap-2 mb-2">
+              <Database size={14} className="text-blue-400" /> Model Pipeline
+            </h2>
+            <label className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded cursor-pointer transition-colors">
+              <UploadCloud size={14} />
+              Upload Data & Retrain
+              <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+            </label>
+            <p className="text-[10px] text-slate-500 mt-2 leading-tight">
+              ⚠️ Deployed free-tiers will crash (OOM) during training. Use locally.
+            </p>
+          </div>
         </div>
 
         {/* Time Travel */}
@@ -119,7 +223,7 @@ export default function Dashboard() {
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             >
-              {dates.map((d, i) => (
+              {(dates || []).map((d, i) => (
                 <option key={d} value={d}>
                   {i === 0 ? "Today (Live Baseline)" : `In ${i} Days`}
                 </option>
@@ -149,7 +253,7 @@ export default function Dashboard() {
           </h2>
           
           <div className="space-y-5">
-            {topVios.map(vio => (
+            {(topVios || []).map(vio => (
               <div key={vio} className="space-y-2">
                 <label className="text-xs text-slate-400 flex justify-between items-end">
                   <span className="capitalize">{vio.toLowerCase()}</span>
@@ -204,15 +308,58 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Map Container */}
-        <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ duration: 1 }}
-            className="flex-1 relative z-0"
-        >
-          <MapComponent polygons={polygons} />
-        </motion.div>
+        {/* Main Content Area */}
+        <div className="flex-1 relative bg-slate-950 flex flex-col z-10">
+          <MapComponent polygons={polygons} topVios={topVios} />
+        </div>
+
+        {/* Retraining Modal Overlay */}
+        <AnimatePresence>
+          {isRetraining && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
+            >
+              <motion.div 
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                className="bg-slate-900 border border-slate-800 p-8 rounded-xl max-w-md w-full shadow-2xl"
+              >
+                <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                  <Database className="text-blue-500" />
+                  Updating Intelligence
+                </h2>
+                <p className="text-sm text-slate-400 mb-6">
+                  The GridLock pipeline is processing new data, re-calculating historical momenta, and re-training the Random Forest model. This may take a few minutes.
+                </p>
+                
+                {retrainError ? (
+                  <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                    <strong>Error:</strong> {retrainError}
+                    <button 
+                      onClick={() => setIsRetraining(false)}
+                      className="mt-4 w-full bg-red-600 hover:bg-red-500 text-white py-2 rounded"
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-300 font-medium">{retrainStep || "Initializing..."}</span>
+                      <Loader2 size={16} className="text-blue-500 animate-spin" />
+                    </div>
+                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-blue-500 h-full w-1/2 animate-pulse rounded-full" />
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

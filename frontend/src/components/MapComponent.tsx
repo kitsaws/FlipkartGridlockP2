@@ -9,7 +9,7 @@ const flipCoords = (coords: any[]) => {
   return coords.map(c => [c[0], c[1]] as [number, number]); 
 };
 
-export default function MapComponent({ polygons }: { polygons: any[] }) {
+export default function MapComponent({ polygons, topVios }: { polygons: any[], topVios?: string[] }) {
   const center: [number, number] = [12.9716, 77.5946];
 
   return (

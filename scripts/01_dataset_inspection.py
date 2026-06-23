@@ -56,7 +56,10 @@ def inspect_dataset(file_path, output_report_path):
 
 if __name__ == "__main__":
     # Define paths
-    DATASET_PATH = "../DATASET/jan to may police violation_anonymized791b166.csv"
+    original_dataset = "../DATASET/jan to may police violation_anonymized791b166.csv"
+    uploaded_dataset = "../data/raw_data.csv"
+    
+    DATASET_PATH = uploaded_dataset if os.path.exists(uploaded_dataset) else original_dataset
     REPORT_PATH = "../reports/dataset_summary.csv"
     
     print("=== Starting Task 0 & 1: Project Initialization & Dataset Inspection ===")
