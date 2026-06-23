@@ -6,3 +6,4 @@ shap
 fastapi
 uvicorn
 pyarrow
+python-multipart
