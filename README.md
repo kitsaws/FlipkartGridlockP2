@@ -4,7 +4,7 @@ An end-to-end AI system that transforms historical parking violation data into p
 
 ---
 
-## 🔬 The Intelligence Pipeline
+## The Intelligence Pipeline
 
 ```mermaid
 graph TD
@@ -37,7 +37,7 @@ The system doesn't just output a probability. We feed the Random Forest into a *
 
 ---
 
-## 🏗️ Web Service Architecture
+## Web Service Architecture
 
 The final intelligence is deployed through a robust **Client-Server Architecture**:
 
@@ -46,7 +46,7 @@ The final intelligence is deployed through a robust **Client-Server Architecture
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 *   **Predictive Time Travel**: Slide forward in time to map exactly where future bottlenecks will occur based on momentum and cyclical patterns.
 *   **Commander Control Panel**: Dynamically adjust the priority of specific violations (e.g., crank "Double Parking" to max priority) to instantly re-calculate AI probabilities without needing to re-train the model.
@@ -55,7 +55,7 @@ The final intelligence is deployed through a robust **Client-Server Architecture
 
 ---
 
-## 🚀 Quickstart Guide
+## Quickstart Guide
 
 This repository is completely self-contained! We solved the 300MB dataset problem by converting the massive 2.6M row CSV into a highly optimized, columnar **Apache Parquet** file. The dataset is now a tiny **5MB** file tracked directly in GitHub, which loads into RAM instantly. You can run the entire system out-of-the-box without downloading external data.
 
@@ -102,7 +102,7 @@ Open your browser and navigate to **[http://localhost:3000](http://localhost:300
 
 ---
 
-## 🧠 Pipeline Execution Guide (Optional)
+## Pipeline Execution Guide (Optional)
 
 If you want to run the full Data Science pipeline from scratch, ensure your raw data is placed in `data/` and execute the scripts sequentially from the `scripts/` directory:
 
